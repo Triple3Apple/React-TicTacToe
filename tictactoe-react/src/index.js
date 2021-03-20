@@ -3,14 +3,51 @@ import ReactDOM from "react-dom";
 import "./index.css";
 
 class Square extends React.Component {
+  /*
+  // In JavaScript classes, you need to always call super when defining 
+  // the constructor of a subclass. All React component classes that have
+  // a constructor should start with a super(props) call.
+  // Removed since Square no longer keeps track of the game’s state, board does.
+  constructor(props) {
+    super(props);
+    this.state = {
+      value:null,
+    };
+  }
+  */
+
   render() {
-    return <button className="square">{/* TODO */}</button>;
+    return (
+      // The component receives the argument as a "props" object
+      // onClick={() => alert('click')}, we’re passing a function as the onClick prop
+      <button 
+        className="square" 
+        onClick= {() => this.props.onClick() }
+      >   
+        {this.props.value}  
+      </button>
+    );
   }
 }
 
 class Board extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+    };
+  }
+
   renderSquare(i) {
-    return <Square />;
+    // Passing value from array in Board to square.
+    // Parenthesis after return so JavaScript does not add a semicolon.
+    // We’re passing down 2 props from Board to Square: value and onClick
+    return (
+      <Square 
+        value={this.state.squares[i]} 
+        onClick={() => this.handleClick(i)}
+      />
+    ); 
   }
 
   render() {
