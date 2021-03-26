@@ -25,11 +25,27 @@ function Square(props) {
   // The component receives the argument as a "props" object
   // onClick={() => alert('click')}, we’re passing a function as the onClick prop
   // Later it was simplified to what it is now.
+  if (props.value == "X") {
+    return (
+      <button className="square player1-square" onClick= {props.onClick}>   
+        {props.value}  
+      </button>
+    );
+  }
+  else if (props.value == "O") {
+    return (
+      <button className="square player2-square" onClick= {props.onClick}>   
+        {props.value}  
+      </button>
+    );
+  }
+  
   return (
     <button className="square" onClick= {props.onClick}>   
       {props.value}  
     </button>
   );
+  
 }
 
 class Board extends React.Component {
@@ -132,7 +148,12 @@ class Game extends React.Component {
 
     let status;
 
-    if (winner) {
+    const tempHistory = this.state.history.slice(0, this.state.stepNumber + 1);
+    const currentSqaure = tempHistory[tempHistory.length - 1];
+    const squares = currentSqaure.squares.slice();
+    if (isTie(squares)) {
+      status = "TIE!";
+    } else  if (winner) {
       status = "Winner: " + winner;
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
@@ -179,4 +200,12 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function isTie(squares) {
+  if (squares.includes(null)) {
+    // not a tie because there is still an empty space
+    return false;
+  }
+  else return true;
 }
